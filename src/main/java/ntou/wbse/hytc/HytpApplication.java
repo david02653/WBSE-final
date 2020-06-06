@@ -1,4 +1,4 @@
-package ntou.wbse.hytp;
+package ntou.wbse.hytc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
