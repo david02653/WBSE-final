@@ -6,15 +6,13 @@ import java.util.Map;
 
 @Document(collection = "option")
 public class OptionList {
-    //TODO: complete getter and setter
 
     private String id;
-    private String userId;
-    private int optionCount;
+    private int count;
     private Map<String, Integer> options;
 
-    public void setOptionCount(int optionCount) {
-        this.optionCount = optionCount;
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public void setOptions(Map<String, Integer> options) {
@@ -22,8 +20,16 @@ public class OptionList {
         // TODO: initialize Map<> list
     }
 
-    public int getOptionCount() {
-        return optionCount;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     public Map<String, Integer> getOptions() {
@@ -33,7 +39,7 @@ public class OptionList {
     @Override
     public String toString() {
         return "OptionList{" +
-                "optionCount=" + optionCount +
+                "optionCount=" + count +
                 ", options=" + options +
                 '}';
     }
