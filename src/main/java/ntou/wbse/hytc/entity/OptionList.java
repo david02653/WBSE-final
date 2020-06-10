@@ -8,6 +8,7 @@ import java.util.Map;
 public class OptionList {
 
     private String id;
+    private String uuid;
     private int count;
     private Map<String, Integer> options;
 
@@ -16,12 +17,15 @@ public class OptionList {
     }
 
     public void setOptions(Map<String, Integer> options) {
-        //this.options = options;
-        // TODO: initialize Map<> list
+        this.options = options;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getId() {
@@ -36,10 +40,15 @@ public class OptionList {
         return options;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
     @Override
     public String toString() {
         return "OptionList{" +
-                "optionCount=" + count +
+                "id='" + id + '\'' +
+                ", count=" + count +
                 ", options=" + options +
                 '}';
     }

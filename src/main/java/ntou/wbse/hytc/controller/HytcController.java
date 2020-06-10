@@ -1,9 +1,6 @@
 package ntou.wbse.hytc.controller;
 
-import ntou.wbse.hytc.entity.DiceRequest;
-import ntou.wbse.hytc.entity.OptionList;
-import ntou.wbse.hytc.entity.OptionListRequest;
-import ntou.wbse.hytc.entity.RollResult;
+import ntou.wbse.hytc.entity.*;
 import ntou.wbse.hytc.service.HytcService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,45 +12,61 @@ import java.util.Map;
 @RestController
 @RequestMapping("/hytc")
 public class HytcController {
+    // todo : add error exception handle, 404
 
     @GetMapping(value = "/test")
-    public ResponseEntity<RollResult> getNormalDiceRoll(){
-        // GET mapping, return normal dice rolling result
-        RollResult result = HytcService.getNormalDiceResult();
+    public ResponseEntity<History> getNormalDiceRoll(){
+        // GET mapping, return cube(6) rolling result
+        History result = HytcService.getNormalDiceResult();
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/cmd")
-    public ResponseEntity<RollResult> getSameDiceRoll(@PathVariable("cmd") String cmd){
-        // GET mapping, return dice command result, e.g. 2d10
-        RollResult result = HytcService.getSameRollDiceResult(cmd);
+    @GetMapping(value = "/{cmd}")
+    public ResponseEntity<History> getSameDiceRoll(@PathVariable("cmd") String cmd){
+        // GET mapping, return multiple dice rolling result, same type of dice
+        History result = HytcService.getSameRollDiceResult(cmd);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Integer>> getAllOption(){
+    public ResponseEntity<Map<String, Integer>> getOptionList(){
         // TODO : GET mapping, return all user defined options
         return null;
     }
 
+    @GetMapping(value = "/option/roll")
+    public ResponseEntity<History> getOptionListResult(@RequestBody OptionListRequest request){
+        // todo: GET mapping, return optionList roll result
+        History result = HytcService.rollOptionList(request);
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping(value = "/{userId}/history")
-    public ResponseEntity<OptionList> getResultList(@PathVariable String userId){
+    public ResponseEntity<Object> getHistoryResultList(@PathVariable String userId){
         // TODO : GET mapping, return past result list
         return null;
     }
 
     @PostMapping(value = "/roll")
-    public ResponseEntity<RollResult> rollDice(@RequestBody DiceRequest request){
+    public ResponseEntity<History> rollDice(@RequestBody DiceRequest request){
         // POST mapping, return multiple type dice roll result
-        RollResult result = HytcService.getRollDiceResult(request);
+        History result = HytcService.getRollDiceResult(request);
         //URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/roll").build().toUri();
         return ResponseEntity.ok(result);
     }
 
     @PostMapping(value = "/option/add")
-    public ResponseEntity<Map<String, Integer>> addOption(@RequestBody OptionListRequest request){
+    public ResponseEntity<OptionList> addOption(@RequestBody OptionListRequest request){
         // TODO : POST mapping, add user defined options with weight
         //System.out.println(request);
+        OptionList list = HytcService.addOptionList(request);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/option/add").build().toUri();
+        return ResponseEntity.created(location).body(list);
+    }
+
+    @PostMapping(value = "/{optionId}/import")
+    public ResponseEntity<Object> importOptionList(@PathVariable String optionId){
+        // todo: let user import optionList via optionList id?
         return null;
     }
 

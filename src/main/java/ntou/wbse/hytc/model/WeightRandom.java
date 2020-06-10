@@ -10,10 +10,13 @@ public class WeightRandom {
     public static void main(String[] argv) throws JsonProcessingException {
 
         Map<String, Integer> map = mapInit();
-        mapSort(map);
+        //map.remove("C");
+        //System.out.println(map);
+        //mapSort(map);
+        System.out.println(roll(map));
 
-        ObjectMapper mapper = new ObjectMapper();
-        System.out.println(mapper.writeValueAsString(map));
+        //ObjectMapper mapper = new ObjectMapper();
+        //System.out.println(mapper.writeValueAsString(map));
     }
 
     public static Map<String, Integer> mapInit(){
@@ -61,5 +64,20 @@ public class WeightRandom {
             int showWeight = (int)(showRate*totalWeight);
             System.out.println(letter + ": " + showWeight);
         }
+    }
+
+    public static String roll(Map<String, Integer> map){
+        int total = 0;
+        NavigableMap<Integer, String> sortedMap = new TreeMap<>();
+        for(Map.Entry<String, Integer> entry : map.entrySet()){
+            int weight = entry.getValue();
+            String letter = entry.getKey();
+            total += weight;
+            sortedMap.put(total, letter);
+        }
+        System.out.println(sortedMap);
+        Double randomDouble = Math.random()*total;
+        String letter = sortedMap.ceilingEntry(randomDouble.intValue()).getValue();
+        return letter;
     }
 }
