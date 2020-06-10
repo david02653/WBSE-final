@@ -2,9 +2,115 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <title>Help You To Choose</title>
 </head>
+<style>
+    body {
+        background-color: darkgrey;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+    .header {
+        text-align: center;
+        background-color: goldenrod;
+        color: white;
+        font-size: 20px;
+        padding: 5px;
+    }
+    .field {
+        background-color:cadetblue;
+        text-align: center;
+        flex-direction: row;
+        display: flex;
+        margin-top: 5px;
+    }
+    .disp {
+        background-color:seagreen;
+        flex-grow: 7;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 3px;
+    }
+    .panel {
+        background-color: violet;
+        flex-direction: column;
+        display: flex;
+        flex-grow: 3;
+        height: 80%;
+    }
+    .usrp {
+        background-color: aquamarine;
+        flex-grow: 4;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 2px;
+    }
+    .his {
+        background-color:crimson;
+        flex-grow: 6;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 2px;
+    }
+    .func {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .rollfield {
+        flex-grow: 7;
+        flex-shrink: 1;
+    }
+    .rollpanel {
+        flex-grow: 3;
+        flex-shrink: 1;
+    }
+</style>
 <body>
-
+    <div id="main" class="container">
+        <div class="header">
+            <h2>HYTC</h2>
+            <p>help you to choose</p>
+        </div>
+        <div class="field">
+            <div id="displayField" class="disp">
+                <div id="diceBlock" class="func">
+                    <div id="diceField" class="rollfield">
+                        roll dice display
+                    </div>
+                    <div id="diceControl" class="rollpanel">
+                        dice control panel
+                    </div>
+                </div>
+                <div id="optionBlock" class="func">
+                    <div id="optionField" class="rollfield">
+                        option table
+                    </div>
+                    <div id="optionControl" class="rollpanel">
+                        option panel
+                    </div>
+                </div>
+            </div>
+            <div id="userPanel" class="panel">
+                <div id="panel" class="usrp">
+                    user login
+                </div>
+                <div id="historyBlock" class="his">
+                    history display
+                </div>
+            </div>
+        </div>       
+    </div>
 </body>
+<script>
+</script>
 </html>
