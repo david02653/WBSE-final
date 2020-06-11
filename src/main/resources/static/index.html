@@ -65,6 +65,8 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+        margin: 3px;
+        background-color: thistle;
     }
     .rollfield {
         flex-grow: 7;
@@ -73,6 +75,12 @@
     .rollpanel {
         flex-grow: 3;
         flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    table {
+        width: 20%;
+        text-align: left;
     }
 </style>
 <body>
@@ -88,7 +96,40 @@
                         roll dice display
                     </div>
                     <div id="diceControl" class="rollpanel">
-                        dice control panel
+                        <div id="dtable">
+                            <table>
+                                <tr>
+                                    <td>Tetrahedron: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Cube: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Octahedron: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Deltohedron: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Dodecahedron: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Icosahedron: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Zocchihedron: </td>
+                                    <td><input type="number" min="0" value="0"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <input type="button" id="rollDice" value="Roll">
+                        <input type="button" id="rollOne" value="Roll one dice">
                     </div>
                 </div>
                 <div id="optionBlock" class="func">
@@ -96,7 +137,19 @@
                         option table
                     </div>
                     <div id="optionControl" class="rollpanel">
-                        option panel
+                        <input type="button" id="executeList" value="Execute List">
+                        <input type="button" id="importList" value="Import List">
+                        <input type="text" id="listId" placeholder="List Code">
+                        <input type="button" id="saveList" value="Save List">
+                        <div id="list">
+                            OptionList<hr>
+                            <div>
+                                <input type="text" placeholder="Input option">
+                                <input type="number" value="1" min="1" max="10000">
+                            </div>
+                            
+                        </div>
+                        <input type="button" id="addOption" value="Add new option">
                     </div>
                 </div>
             </div>
