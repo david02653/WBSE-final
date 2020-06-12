@@ -17,14 +17,14 @@ public class HytcController {
     @GetMapping(value = "/test")
     public ResponseEntity<History> getNormalDiceRoll(){
         // GET mapping, return cube(6) rolling result
-        History result = HytcService.getNormalDiceResult();
+        History result = HytcService.rollNormalDice();
         return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/{cmd}")
     public ResponseEntity<History> getSameDiceRoll(@PathVariable("cmd") String cmd){
         // GET mapping, return multiple dice rolling result, same type of dice
-        History result = HytcService.getSameRollDiceResult(cmd);
+        History result = HytcService.rollSingleTypeDice(cmd);
         return ResponseEntity.ok(result);
     }
 
@@ -37,7 +37,7 @@ public class HytcController {
     @PostMapping(value = "/roll")
     public ResponseEntity<History> rollDice(@RequestBody DiceRequest request){
         // POST mapping, return multiple type dice roll result
-        History result = HytcService.getRollDiceResult(request);
+        History result = HytcService.rollDice(request);
         //URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/roll").build().toUri();
         return ResponseEntity.ok(result);
     }

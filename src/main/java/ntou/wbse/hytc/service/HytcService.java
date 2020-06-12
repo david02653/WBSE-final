@@ -25,7 +25,7 @@ public class HytcService {
         this.userRepository = userRepository;
     }
 
-    public static History getNormalDiceResult(){
+    public static History rollNormalDice(){
         //RollResult result = new RollResult();
         History result = new History();
         int score = (int)(Math.random()*6 + 1);
@@ -37,7 +37,7 @@ public class HytcService {
         return result;
     }
 
-    public static History getSameRollDiceResult(String cmd){
+    public static History rollSingleTypeDice(String cmd){
         // same type dice roll result, e.g. 2d6
         String[] tokens = cmd.split("d");
         int round = Integer.parseInt(tokens[0]);
@@ -60,7 +60,7 @@ public class HytcService {
         return result;
     }
 
-    public static History getRollDiceResult(DiceRequest request){
+    public static History rollDice(DiceRequest request){
         History result = new History();
         System.out.println(request);
         Map<String, Integer> map = new HashMap<>();
@@ -100,35 +100,6 @@ public class HytcService {
         return generateOptionList(request);
     }
 
-    public static OptionList generateOptionList(OptionListRequest request){
-        OptionList newOption = new OptionList();
-        newOption.setCount(request.getCount());
-        Map<String, Integer> options = new HashMap<>();
-        ArrayList<String> option = request.getOptions();
-        ArrayList<Integer> weight = request.getWeights();
-        for(int i=0; i<request.getCount(); i++){
-            options.put(option.get(i), weight.get(i));
-        }
-        newOption.setOptions(options);
-        return newOption;
-    }
-
-    public static OptionList updateOptionList(){
-        // todo: search from database and update optionList
-        return null;
-    }
-
-    public static int removeOptionList(){
-        // todo: remove optionList from database
-        return 0;
-    }
-
-    public static OptionList getOptionList(){
-        // todo: search from database and return target optionList
-        return null;
-    }
-
-    // optionList roll
     public static History rollOptionList(OptionListRequest request){
         OptionList target = generateOptionList(request);
         Map<String, Integer> map = target.getOptions();
@@ -143,6 +114,33 @@ public class HytcService {
         result.setDetail(map);
         result.setTarget(request);
         return result;
+    }
+    public static OptionList updateOptionList(String id){
+        // todo: search from database and update optionList
+        return null;
+    }
+
+    public static int removeOptionList(String id){
+        // todo: remove optionList from database
+        return 0;
+    }
+
+    public static OptionList getOptionList(String id){
+        // todo: search from database and return target optionList
+        return null;
+    }
+
+    public static OptionList generateOptionList(OptionListRequest request){
+        OptionList newOption = new OptionList();
+        newOption.setCount(request.getCount());
+        Map<String, Integer> options = new HashMap<>();
+        ArrayList<String> option = request.getOptions();
+        ArrayList<Integer> weight = request.getWeights();
+        for(int i=0; i<request.getCount(); i++){
+            options.put(option.get(i), weight.get(i));
+        }
+        newOption.setOptions(options);
+        return newOption;
     }
 
     public static User signUp(String username){
