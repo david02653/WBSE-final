@@ -28,19 +28,6 @@ public class HytcController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping
-    public ResponseEntity<Map<String, Integer>> getOptionList(){
-        // TODO : GET mapping, return all user defined options
-        return null;
-    }
-
-    @GetMapping(value = "/option/roll")
-    public ResponseEntity<History> getOptionListResult(@RequestBody OptionListRequest request){
-        // todo: GET mapping, return optionList roll result
-        History result = HytcService.rollOptionList(request);
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping(value = "/{userId}/history")
     public ResponseEntity<Object> getHistoryResultList(@PathVariable String userId){
         // TODO : GET mapping, return past result list
@@ -55,6 +42,25 @@ public class HytcController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping(value = "/option/roll")
+    public ResponseEntity<History> getOptionListResult(@RequestBody OptionListRequest request){
+        // todo: GET mapping, return optionList roll result
+        History result = HytcService.rollOptionList(request);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(value = "/{optionId}")
+    public ResponseEntity<Map<String, Integer>> getOptionList(@PathVariable String optionId){
+        // TODO : GET mapping, return all user defined options
+        return null;
+    }
+
+    @GetMapping(value = "/{optionId}/import")
+    public ResponseEntity<Object> importOptionList(@PathVariable String optionId){
+        // todo: let user import optionList via optionList id?
+        return null;
+    }
+
     @PostMapping(value = "/option/add")
     public ResponseEntity<OptionList> addOption(@RequestBody OptionListRequest request){
         // TODO : POST mapping, add user defined options with weight
@@ -64,20 +70,14 @@ public class HytcController {
         return ResponseEntity.created(location).body(list);
     }
 
-    @PostMapping(value = "/{optionId}/import")
-    public ResponseEntity<Object> importOptionList(@PathVariable String optionId){
-        // todo: let user import optionList via optionList id?
-        return null;
-    }
-
-    @PutMapping
-    public ResponseEntity<Map<String, Integer>> updateOption(){
+    @PutMapping(value = "/{optionId}/update")
+    public ResponseEntity<Map<String, Integer>> updateOption(@PathVariable String optionId, @RequestBody OptionListRequest request){
         // TODO : PUT mapping, update user defined options
         return null;
     }
 
-    @DeleteMapping
-    public ResponseEntity<Map<String, Integer>> removeOption(){
+    @DeleteMapping(value = "/{optionId}/delete")
+    public ResponseEntity<Map<String, Integer>> removeOption(@PathVariable String optionId){
         // TODO : DELETE mapping, remove user defined option
         return null;
     }
