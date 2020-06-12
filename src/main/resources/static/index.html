@@ -176,18 +176,31 @@
         document.getElementById("list").innerHTML += `<div>
                                 <input type="text" placeholder="Input option">
                                 <input type="number" value="1" min="1" max="10000">
-                                <input type="button" class="del" value="Remove">
+                                <input type="button" onclick="clickEvent(this)" class="del" value="Remove">
                             </div>`;
     }
     document.getElementById("addOption").addEventListener("click", addOption);
 
-    // try to remove clicked element, not working
-    let dTarget = document.getElementsByClassName("del");
-    Array.prototype.forEach.call(dTarget, function(element){
-        element.addEventListener("click", function(e){
-            console.log("remove element");
-            e.parentElement.remove();
-        });
-    });
+    function clickEvent(e) {
+        console.log(e);
+        console.log("remove element");
+        e.parentElement.remove();
+
+        // let dTarget = document.getElementsByClassName("del");
+        // [...dTarget].forEach(btn => {
+
+        //     btn.addEventListener("click", function(e){
+        //         console.log("remove element");
+        //         e.target.parentElement.remove();
+        //         // e.target.parentElement.outterHTML = "";
+        //     });
+        // })
+        // Array.prototype.forEach.call(dTarget, function(element){
+        //     element.addEventListener("click", function(e){
+        //         console.log("remove element");
+        //         e.target.parentElement.outterHTML = "";
+        //     });
+        // });
+    }
 </script>
 </html>
