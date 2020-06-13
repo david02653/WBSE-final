@@ -160,22 +160,23 @@
             <div id="userPanel" class="panel">
                 <div id="panel" class="usrp">
                     <input type="text" id="newUser" placeholder="Input User Name you want">
-                    <input type="button" id="signIn" value="Sign in">
-                    <input type="text" id="username" placeholder="User Name">
+                    <input type="button" id="signUp" value="Sign Up">
+                    <!--<input type="text" id="username" placeholder="User Name">-->
                     <input type="text" id="userId" placeholder="User ID">
                     <input type="button" id="login" value="Login">
-                    <input type="text" placeholder="Current User" id="currentUser" disabled>
-                    <input type="text" placeholder="Current id" id="currentId" disabled>
+                    <input type="text" value="" placeholder="Current User" id="currentUser" disabled>
+                    <input type="text" value="" placeholder="Current id" id="currentId" disabled>
                     <input type="button" value="Copy User id" id="copy">
                 </div>
                 <div id="historyBlock" class="his">
                     history display
                 </div>
             </div>
-        </div>       
+        </div>
     </div>
 </body>
 <script>
+    let urlBase = window.location.origin + `/hytc`; // spring boot url base
     function addOption(){
         console.log("try to add option");
         document.getElementById("list").innerHTML += `<div>
@@ -211,6 +212,71 @@
         // });
 
     }
+
+    function signUp(){
+        let url = urlBase + `/signUp`;
+        let username = document.getElementById("newUser");
+        console.log(url);
+        // fetch server to get id
+        fetch(url, {method: 'POST', headers: {
+            'Content-Type': 'application/json'
+            }, body: username.value})
+            .then(function (res) {
+                console.log("parse data")
+                return res.json();
+            }).then(function (res) {
+                //console.table(res);
+                setter(res);
+                window.location.reload();
+        });
+        // store user info in localstorage
+        //localStorage.setItem("userId", id.toString());
+        //console.log(item);
+        //localStorage.setItem("userId", item.userId);
+        //localStorage.setItem("username", item.userName);
+
+        // reload page
+        //window.location.reload();
+        //checkUser();
+    }
+    function setter(target){
+        console.log(target);
+        localStorage.setItem("username", target.userName);
+        localStorage.setItem("userId", target.userId);
+    }
+
+    function login(){
+        let userId = document.getElementById("userId");
+        console.log(userId.value);
+        let url = urlBase + `/signIn`;
+        // fetch server to check if user available
+        fetch(url, {method: 'POST', headers: {
+            'Content-Type': 'application/json'
+            }, body: userId.value})
+            .then(function (res) {
+                console.log("parse data, login");
+                console.table(res);
+                if(res.ok){
+                    // return if response ok
+                    return res.json();
+                }
+                throw new Error("user might not exist !")
+            }).then(function (res) {
+                console.table(res);
+                setter(res);
+                //window.location.reload();
+                checkUser();
+        }).catch(function (err) {
+            console.log("error occur: " + err.message);
+        })
+        // pop alert and return if illegal
+        // store user info in localstorage
+        // load history record
+
+        // reload page
+        //window.location.reload();
+    }
+
     function checkUser(){
         if(localStorage.getItem("userId") === null){
             // no current user
@@ -220,16 +286,19 @@
             document.getElementById("copy").setAttribute("style", "display: none");
         }else{
             // got current user
-            // disable login space
-            // disable sign in space
-            document.getElementById("username").setAttribute("style", "display: none");
-            document.getElementById("userId").setAttribute("style", "display: none");
-            document.getElementById("login").setAttribute("style", "display: none");
-            document.getElementById("signIn").setAttribute("style", "display: none");
-            document.getElementById("newUser").setAttribute("style", "display: none");
             document.getElementById("currentId").removeAttribute("style");
             document.getElementById("currentUser").removeAttribute("style");
+            document.getElementById("currentUser").value = localStorage.getItem("username");
+            document.getElementById("currentId").value = localStorage.getItem("userId");
+            // disable login space
+            document.getElementById("userId").setAttribute("style", "display: none");
+            document.getElementById("login").setAttribute("style", "display: none");
+            // disable sign up space
+            document.getElementById("signUp").setAttribute("style", "display: none");
+            document.getElementById("newUser").setAttribute("style", "display: none");
+            //document.getElementById("username").setAttribute("style", "display: none");
             document.getElementById("copy").removeAttribute("style");
+
         }
     }
     //document.getElementById("userId").setAttribute("style", "display: none");
@@ -240,6 +309,8 @@
         console.log("copy id");
     });
     window.addEventListener("load", checkUser);
+    document.getElementById("signUp").addEventListener("click", signUp);
+    document.getElementById("login").addEventListener("click", login);
 </script>
 
 </html>

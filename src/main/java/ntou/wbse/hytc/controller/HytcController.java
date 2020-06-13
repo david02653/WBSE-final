@@ -1,6 +1,7 @@
 package ntou.wbse.hytc.controller;
 
 import ntou.wbse.hytc.entity.*;
+import ntou.wbse.hytc.exception.NotFoundException;
 import ntou.wbse.hytc.service.HytcService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +81,26 @@ public class HytcController {
     public ResponseEntity<Map<String, Integer>> removeOption(@PathVariable String optionId){
         // TODO : DELETE mapping, remove user defined option
         return null;
+    }
+
+    @PostMapping(value = "/signUp")
+    public ResponseEntity<User> signUp(@RequestBody String username){
+        User user = HytcService.signUp(username);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/signUp").build().toUri();
+        return ResponseEntity.created(location).body(user);
+    }
+
+    @PostMapping(value = "/signIn")
+    public ResponseEntity<User> signIn(@RequestBody String uid){
+        User user = HytcService.signIn(uid);
+        if(user == null){
+            System.out.println("error occur");
+            throw new NotFoundException("User Not Found");
+        }else{
+            System.out.println("User Found: " + user);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/signIn").build().toUri();
+            return ResponseEntity.created(location).body(user);
+        }
     }
 }
 // add user login?

@@ -152,17 +152,20 @@ public class HytcService {
         User user = new User();
         String random = UUID.randomUUID().toString();
         // search if uuid exist
-        while(!userRepository.existsByUuidExists(random)){
+        while(userRepository.findUserByUserId(random) != null){
             random = UUID.randomUUID().toString();
         }
         user.setUserName(username);
-        user.setUuid(random);
+        user.setUserId(random);
         // store in database
+        userRepository.insert(user);
+        System.out.println(user);
         return user;
     }
 
-    public static User signInByUUID(String uuid){
-        User user = userRepository.findUserByUuid(uuid);
-        return user;
+    public static User signIn(String uid){
+        System.out.println(uid);
+        //User user = userRepository.findUserByUserId(uuid);
+        return userRepository.findUserByUserId(uid);
     }
 }
