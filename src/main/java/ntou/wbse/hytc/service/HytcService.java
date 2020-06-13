@@ -115,6 +115,11 @@ public class HytcService {
         result.setTarget(request);
         return result;
     }
+
+    public static OptionList saveOptionList(String id){
+        return null;
+    }
+
     public static OptionList updateOptionList(String id){
         // todo: search from database and update optionList
         return null;
