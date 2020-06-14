@@ -3,6 +3,7 @@ package ntou.wbse.hytc.controller;
 import ntou.wbse.hytc.entity.*;
 import ntou.wbse.hytc.exception.NotFoundException;
 import ntou.wbse.hytc.service.HytcService;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,7 +14,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/hytc")
 public class HytcController {
-    // todo : add error exception handle, 404
 
     @GetMapping(value = "/test")
     public ResponseEntity<History> getNormalDiceRoll(){
@@ -51,9 +51,9 @@ public class HytcController {
     }
 
     @GetMapping(value = "/{optionId}")
-    public ResponseEntity<Map<String, Integer>> getOptionList(@PathVariable String optionId){
-        // TODO : GET mapping, return all user defined options
-        return null;
+    public ResponseEntity<OptionList> getOptionList(@PathVariable String optionId){
+        OptionList list = HytcService.getOptionList(optionId);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping(value = "/{optionId}/import")
@@ -75,6 +75,13 @@ public class HytcController {
     public ResponseEntity<Map<String, Integer>> updateOption(@PathVariable String optionId, @RequestBody OptionListRequest request){
         // TODO : PUT mapping, update user defined options
         return null;
+    }
+
+    @PostMapping(value = "/option/save")
+    public ResponseEntity<OptionList> saveOptionList(@RequestBody OptionListRequest request){
+        OptionList list = HytcService.saveOptionList(request);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/option/save").build().toUri();
+        return ResponseEntity.created(location).body(list);
     }
 
     @DeleteMapping(value = "/{optionId}/delete")

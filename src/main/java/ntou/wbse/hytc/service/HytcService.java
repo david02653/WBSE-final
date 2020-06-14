@@ -1,6 +1,7 @@
 package ntou.wbse.hytc.service;
 
 import ntou.wbse.hytc.entity.*;
+import ntou.wbse.hytc.exception.NotFoundException;
 import ntou.wbse.hytc.model.WeightRandom;
 import ntou.wbse.hytc.repository.OptionRepository;
 import ntou.wbse.hytc.repository.UserRepository;
@@ -16,12 +17,12 @@ import java.util.UUID;
 public class HytcService {
 
     @Autowired
-    private static OptionRepository repository;
+    private static OptionRepository optionRepository;
     @Autowired
     private static UserRepository userRepository;
 
-    public HytcService(OptionRepository repository, UserRepository userRepository){
-        this.repository = repository;
+    public HytcService(OptionRepository optionRepository, UserRepository userRepository){
+        this.optionRepository = optionRepository;
         this.userRepository = userRepository;
     }
 
@@ -116,8 +117,15 @@ public class HytcService {
         return result;
     }
 
-    public static OptionList saveOptionList(String id){
-        return null;
+    public static OptionList saveOptionList(OptionListRequest request){
+        OptionList list = generateOptionList(request);
+
+        list.setUid("init");
+        optionRepository.insert(list);
+        System.out.println(list);
+
+
+        return list;
     }
 
     public static OptionList updateOptionList(String id){
@@ -131,8 +139,7 @@ public class HytcService {
     }
 
     public static OptionList getOptionList(String id){
-        // todo: search from database and return target optionList
-        return null;
+        return optionRepository.findById(id).orElseThrow(() -> new NotFoundException("No OptionList Found !"));
     }
 
     public static OptionList generateOptionList(OptionListRequest request){
