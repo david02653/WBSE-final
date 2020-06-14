@@ -69,8 +69,15 @@
         background-color: thistle;
     }
     .rollfield {
-        flex-grow: 7;
+        flex-grow: 8;
         flex-shrink: 1;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        border: 1px solid black;
+        border-collapse: collapse;
     }
     .rollpanel {
         flex-grow: 2;
@@ -78,11 +85,23 @@
         display: flex;
         flex-direction: column;
     }
-    table {
+    #diceSet {
         width: 20%;
         text-align: left;
     }
+    tr {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
     .del {
+    }
+    #resp {
+        border: 1px solid black;
+        border-collapse: collapse;
     }
 </style>
 <body>
@@ -99,7 +118,7 @@
                     </div>
                     <div id="diceControl" class="rollpanel">
                         <div id="dtable">
-                            <table>
+                            <table id="diceSet">
                                 <tr>
                                     <td>Tetrahedron: </td>
                                     <td><input type="number" min="0" value="0"></td>
@@ -213,6 +232,28 @@
 
     }
 
+    function importList() {
+        let id = `${document.getElementById("listId").value}`;
+        if(!id){
+            window.alert("please input Option List id.");
+            return;
+        }else console.log("your id is " + id);
+        let url = urlBase + `/` + id + `/import`;
+        console.log(url);
+
+        fetch(url, {method: 'GET', headers: {
+            'Content-Type': 'application/json'
+            }})
+            .then(function (res) {
+                if(res.ok){
+                    return res.json();
+                }
+            })
+            .then(function (res) {
+                console.table(res);
+            })
+    }
+
     function saveList() {
         let url = urlBase + '/option/save';
         let originCont = document.getElementById("list").getElementsByTagName("div");
@@ -245,11 +286,35 @@
                     console.log("optionList save done");
                     return res.json();
                 }
+                throw new Error("Error occur during saving process")
+            })
+            .catch(function (err) {
+                console.log("error occur: " + err.message);
             })
             .then(function (res) {
                 console.log(res);
                 let field = document.getElementById("optionField");
-                field.innerHTML = ``;
+                let insert = "";
+                for(let i=0; i<res.count; i++){
+                    insert += `<tr><td>option</td><td>` + res.options[i] + `</td></tr><tr><td>weight</td><td>` + res.weights[i] + `</td></tr>`;
+                }
+                field.innerHTML = `<table id="resp">
+                    <tr><td colspan="2">Save Success</td></tr>
+                    <tr>
+                        <td>id</td>
+                        <td>` + res.id + `</td>
+                    </tr>
+                    <tr>
+                        <td>uid</td>
+                        <td>` + res.uid + `</td>
+                    </tr>
+                    <tr>
+                        <td>count</td>
+                        <td>` + res.count + `</td>
+                    </tr>
+                    <tr><td colspan="2">options</td></tr>
+                    `+ insert +`
+                    </table>`;
             })
 
     }
@@ -353,6 +418,7 @@
     document.getElementById("signUp").addEventListener("click", signUp);
     document.getElementById("login").addEventListener("click", login);
     document.getElementById("saveList").addEventListener("click", saveList);
+    document.getElementById("importList").addEventListener("click", importList);
 </script>
 
 </html>

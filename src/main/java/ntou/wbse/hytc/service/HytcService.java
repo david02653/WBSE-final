@@ -117,15 +117,13 @@ public class HytcService {
         return result;
     }
 
-    public static OptionList saveOptionList(OptionListRequest request){
+    public static OptionListResponse saveOptionList(OptionListRequest request){
         OptionList list = generateOptionList(request);
-
         list.setUid("init");
         optionRepository.insert(list);
-        System.out.println(list);
+        //System.out.println(list);
 
-
-        return list;
+        return generateOptionResponse(list);
     }
 
     public static OptionList updateOptionList(String id){
@@ -140,6 +138,23 @@ public class HytcService {
 
     public static OptionList getOptionList(String id){
         return optionRepository.findById(id).orElseThrow(() -> new NotFoundException("No OptionList Found !"));
+    }
+
+    public static OptionListResponse generateOptionResponse(OptionList list){
+        OptionListResponse response = new OptionListResponse();
+        Map<String, Integer> map = list.getOptions();
+        ArrayList<String> options = new ArrayList<>();
+        ArrayList<Integer> weights = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry : map.entrySet()){
+            options.add(entry.getKey());
+            weights.add(entry.getValue());
+        }
+        response.setId(list.getId());
+        response.setUid(list.getUid());
+        response.setCount(list.getCount());
+        response.setOptions(options);
+        response.setWeights(weights);
+        return response;
     }
 
     public static OptionList generateOptionList(OptionListRequest request){

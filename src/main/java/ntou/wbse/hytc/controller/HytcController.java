@@ -50,13 +50,14 @@ public class HytcController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/{optionId}")
-    public ResponseEntity<OptionList> getOptionList(@PathVariable String optionId){
+    @GetMapping(value = "/{optionId}/import")
+    public ResponseEntity<OptionListResponse> getOptionList(@PathVariable String optionId){
         OptionList list = HytcService.getOptionList(optionId);
-        return ResponseEntity.ok(list);
+        OptionListResponse resp = HytcService.generateOptionResponse(list);
+        return ResponseEntity.ok(resp);
     }
 
-    @GetMapping(value = "/{optionId}/import")
+    @GetMapping(value = "/{optionId}")
     public ResponseEntity<Object> importOptionList(@PathVariable String optionId){
         // todo: let user import optionList via optionList id?
         return null;
@@ -78,8 +79,8 @@ public class HytcController {
     }
 
     @PostMapping(value = "/option/save")
-    public ResponseEntity<OptionList> saveOptionList(@RequestBody OptionListRequest request){
-        OptionList list = HytcService.saveOptionList(request);
+    public ResponseEntity<OptionListResponse> saveOptionList(@RequestBody OptionListRequest request){
+        OptionListResponse list = HytcService.saveOptionList(request);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/option/save").build().toUri();
         return ResponseEntity.created(location).body(list);
     }
