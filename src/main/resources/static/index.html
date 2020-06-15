@@ -163,8 +163,9 @@
                         <input type="button" id="importList" value="Import List">
                         <input type="button" id="saveList" value="Save List">
                         <input type="button" id="updateList" value="Update List">
+                        OptionList<hr>
                         <div id="list">
-                            OptionList<hr>
+
                             <div>
                                 <input type="text" placeholder="Input option">
                                 <input type="number" value="1" min="1" max="10000">
@@ -210,6 +211,11 @@
         window.alert("at least one option required !");
     }
     function clickEvent(e) {
+        if(document.getElementsByClassName("del").length < 2){
+            window.alert("at least one option required !");
+            return;
+        }
+        window.alert("at least one option required !");
 
         console.log(e);
         console.log("remove element");
@@ -251,6 +257,17 @@
             })
             .then(function (res) {
                 console.table(res);
+                console.log("insert option list");
+                let optList = document.getElementById("list");
+                let insertCont = "";
+                for(let i=0; i<res.count; i++){
+                    insertCont += `<div>
+                                <input type="text" value="` + res.options[i] + `" placeholder="Input option">
+                                <input type="number" value="` + res.weights[i] + `" min="1" max="10000">
+                                <input type="button" onclick="clickEvent(this)" class="del" value="Remove">
+                            </div>`;
+                }
+                optList.innerHTML = insertCont;
             })
     }
 
