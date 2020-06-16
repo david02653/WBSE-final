@@ -43,11 +43,12 @@ public class HytcController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "/option/roll")
+    @PostMapping(value = "/option/roll")
     public ResponseEntity<History> getOptionListResult(@RequestBody OptionListRequest request){
-        // todo: GET mapping, return optionList roll result
+        // todo: POST mapping, return optionList roll result
         History result = HytcService.rollOptionList(request);
-        return ResponseEntity.ok(result);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/option/roll").build().toUri();
+        return ResponseEntity.created(location).body(result);
     }
 
     @GetMapping(value = "/{optionId}/import")

@@ -336,6 +336,56 @@
 
     }
 
+    function executeList() {
+        let url = urlBase + `/option/roll`;
+        console.log(url);
+        let list = document.getElementById("list").getElementsByTagName("div");
+        let optList = [];
+        let weiList = [];
+        [...list].forEach(option => {
+            let element = option.getElementsByTagName("input");
+            console.log(element.length);
+            // block weird input value
+            if(element[0].value === "") return true;
+            if(element[1].value < 0 || element[1].value > 10000) return true;
+            optList.push(element[0].value);
+            weiList.push(element[1].value);
+        })
+        console.log(optList);
+        console.log(weiList);
+
+        fetch(url, {method: 'POST', headers: {
+            'Content-Type': 'application/json'
+            }, body: JSON.stringify({
+                count: list.length,
+                options: optList,
+                weights: weiList
+            })})
+            .then(function (res) {
+                console.log(res);
+                if(res.ok){
+                    return res.json();
+                }
+            })
+            .then(function (res) {
+                console.table(res);
+                // todo: save result if user exist
+                let field = document.getElementById("optionField");
+                let map = res.detail;
+                //console.log(map);
+                //console.log(Object.keys(map));
+                //console.log(res.target.weights[res.target.options.indexOf(res.result)]);
+                field.innerHTML = `<table id="resp">
+                    <tr><td colspan="3">Option List Result</td></tr>
+                    <tr>
+                        <td>Result</td>
+                        <td>` + res.result + `</td>
+                        <td>` + res.target.weights[res.target.options.indexOf(res.result)] + `</td>
+                    </tr>
+                    </table>`;
+            })
+    }
+
     function signUp(){
         let url = urlBase + `/signUp`;
         let username = document.getElementById("newUser");
@@ -436,6 +486,7 @@
     document.getElementById("login").addEventListener("click", login);
     document.getElementById("saveList").addEventListener("click", saveList);
     document.getElementById("importList").addEventListener("click", importList);
+    document.getElementById("executeList").addEventListener("click", executeList);
 </script>
 
 </html>
