@@ -66,20 +66,21 @@ public class HytcService {
         System.out.println(request);
         Map<String, Integer> map = new HashMap<>();
         Map<String, ArrayList<Integer>> detail = new HashMap<>();
-        map.put("4", request.getFour());
-        map.put("6", request.getSix());
-        map.put("8", request.getEight());
-        map.put("10", request.getTen());
-        map.put("12", request.getTwelve());
-        map.put("20", request.getTwenty());
-        map.put("100", request.getHundred());
+        map.put("four", request.getFour());
+        map.put("six", request.getSix());
+        map.put("eight", request.getEight());
+        map.put("ten", request.getTen());
+        map.put("twelve", request.getTwelve());
+        map.put("twenty", request.getTwenty());
+        map.put("hundred", request.getHundred());
         int sum=0;
         for(Map.Entry<String, Integer> entry: map.entrySet()){
             String key = entry.getKey();
             Integer value = entry.getValue();
             ArrayList<Integer> current = new ArrayList<>();
             for(int i=0; i<value; i++){
-                int score = (int)(Math.random() * Integer.parseInt(key)) + 1;
+                //int score = (int)(Math.random() * Integer.parseInt(key)) + 1;
+                int score = (int)(Math.random() * getDiceValue(key)) + 1;
                 current.add(score);
                 sum += score;
                 // maybe store each dice result here
@@ -168,6 +169,27 @@ public class HytcService {
         }
         newOption.setOptions(options);
         return newOption;
+    }
+
+    public static Integer getDiceValue(String number){
+        switch (number){
+            case "four":
+                return 4;
+            case "six":
+                return 6;
+            case "eight":
+                return 8;
+            case "ten":
+                return 10;
+            case "twelve":
+                return 12;
+            case "twenty":
+                return 20;
+            case "hundred":
+                return 100;
+            default:
+                return -2;
+        }
     }
 
     public static User signUp(String username){

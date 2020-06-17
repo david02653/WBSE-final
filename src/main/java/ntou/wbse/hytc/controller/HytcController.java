@@ -14,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/hytc")
 public class HytcController {
+    // todo: complete save function, complete user control
 
     @GetMapping(value = "/test")
     public ResponseEntity<History> getNormalDiceRoll(){
@@ -39,13 +40,12 @@ public class HytcController {
     public ResponseEntity<History> rollDice(@RequestBody DiceRequest request){
         // POST mapping, return multiple type dice roll result
         History result = HytcService.rollDice(request);
-        //URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/roll").build().toUri();
-        return ResponseEntity.ok(result);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/roll").build().toUri();
+        return ResponseEntity.created(location).body(result);
     }
 
     @PostMapping(value = "/option/roll")
     public ResponseEntity<History> getOptionListResult(@RequestBody OptionListRequest request){
-        // todo: POST mapping, return optionList roll result
         History result = HytcService.rollOptionList(request);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/option/roll").build().toUri();
         return ResponseEntity.created(location).body(result);

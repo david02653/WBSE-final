@@ -450,6 +450,119 @@
         //window.location.reload();
     }
 
+    function rollDiceCmd() {
+        let url = urlBase + `/roll`;
+        console.log(url);
+        let dice = document.getElementById("diceSet").getElementsByTagName("input");
+        let diceNum = [];
+        [...dice].forEach(typ => {
+            //console.log(typ);
+            diceNum.push(typ.value);
+        })
+        console.log(diceNum);
+
+        fetch(url, {method: 'POST', headers: {
+            'Content-Type': 'application/json'
+            }, body: JSON.stringify({
+                four: diceNum[0],
+                six: diceNum[1],
+                eight: diceNum[2],
+                ten: diceNum[3],
+                twelve: diceNum[4],
+                twenty: diceNum[5],
+                hundred: diceNum[6]
+            })})
+            .then(function (res) {
+                if(res.ok){
+                    return res.json();
+                }
+            })
+            .then(function (res) {
+                console.log(res);
+                console.log(res.detail.hundred);
+                console.log(getDetail(res.detail.hundred));
+                let field = document.getElementById("diceField");
+                let detail = res.detail;
+                field.innerHTML = `<table id="resp">
+                    <tr><td colspan="2">Roll Result</td></tr>
+                    <tr>
+                        <td>Result</td>
+                        <td>` + res.result + `</td>
+                    </tr>
+                    <tr>
+                        <td>Tetrahedron (4)</td>
+                        <td>` + getDetail(detail.four) + `</td>
+                    </tr>
+                    <tr>
+                        <td>Cube (6)</td>
+                        <td>` + getDetail(detail.six) + `</td>
+                    </tr>
+                    <tr>
+                        <td>Octahedron (8)</td>
+                        <td>` + getDetail(detail.eight) + `</td>
+                    </tr>
+                    <tr>
+                        <td>Deltohedron (10)</td>
+                        <td>` + getDetail(detail.ten) + `</td>
+                    </tr>
+                    <tr>
+                        <td>Dodecahedron (12)</td>
+                        <td>` + getDetail(detail.twelve) + `</td>
+                    </tr>
+                    <tr>
+                        <td>Icosahedron (20)</td>
+                        <td>` + getDetail(detail.twenty) + `</td>
+                    </tr>
+                    <tr>
+                        <td>Zocchihedron (100)</td>
+                        <td>` + getDetail(detail.hundred) + `</td>
+                    </tr>
+                    </table>`;
+            })
+    }
+
+    function rollCube() {
+        let url = urlBase + `/test`;
+        console.log(url);
+
+        fetch(url, {method: 'GET', headers: {
+            'Content-Type': 'application/json'
+            }})
+            .then(function (res) {
+                if(res.ok) return res.json();
+            })
+            .then(function (res) {
+                console.log(res);
+                let field = document.getElementById("diceField");
+                field.innerHTML = `<table id="resp">
+                    <tr><td colspan="2">Roll Cube Dice Result</td></tr>
+                    <tr>
+                        <td>Result</td>
+                        <td>` + res.result + `</td>
+                    </tr>
+                    </table>`;
+            })
+    }
+
+    function getDetail(list) {
+        let info = "[";
+        let start = 1;
+        [...list].forEach(ele => {
+            if(start === 1){
+                start = 0;
+                info += ele;
+            }else{
+                info += ", " + ele;
+            }
+        })
+        info += "]";
+        return info;
+    }
+
+    function saveHistory(target, mode) {
+        let url = urlBase + ``;
+    }
+
     function checkUser(){
         if(localStorage.getItem("userId") === null){
             // no current user
@@ -487,6 +600,8 @@
     document.getElementById("saveList").addEventListener("click", saveList);
     document.getElementById("importList").addEventListener("click", importList);
     document.getElementById("executeList").addEventListener("click", executeList);
+    document.getElementById("rollDice").addEventListener("click", rollDiceCmd);
+    document.getElementById("rollOne").addEventListener("click", rollCube);
 </script>
 
 </html>
