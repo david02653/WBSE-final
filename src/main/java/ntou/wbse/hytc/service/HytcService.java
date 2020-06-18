@@ -3,15 +3,13 @@ package ntou.wbse.hytc.service;
 import ntou.wbse.hytc.entity.*;
 import ntou.wbse.hytc.exception.NotFoundException;
 import ntou.wbse.hytc.model.WeightRandom;
+import ntou.wbse.hytc.repository.HistoryRepository;
 import ntou.wbse.hytc.repository.OptionRepository;
 import ntou.wbse.hytc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class HytcService {
@@ -20,10 +18,13 @@ public class HytcService {
     private static OptionRepository optionRepository;
     @Autowired
     private static UserRepository userRepository;
+    @Autowired
+    private static HistoryRepository historyRepository;
 
-    public HytcService(OptionRepository optionRepository, UserRepository userRepository){
+    public HytcService(OptionRepository optionRepository, UserRepository userRepository, HistoryRepository historyRepository){
         this.optionRepository = optionRepository;
         this.userRepository = userRepository;
+        this.historyRepository = historyRepository;
     }
 
     public static History rollNormalDice(){
@@ -211,5 +212,21 @@ public class HytcService {
         System.out.println(uid);
         //User user = userRepository.findUserByUserId(uuid);
         return userRepository.findUserByUserId(uid);
+    }
+
+    public static History save(History target){
+        // create history timestamp
+        //Date date = new Date();
+        //target.setTimestamp(date);
+        // create history id
+        String random = UUID.randomUUID().toString();
+        while (historyRepository.findHistoryByHistoryId(random) != null){
+            random = UUID.randomUUID().toString();
+        }
+        target.setHistoryId(random);
+        // save in database
+        historyRepository.insert(target);
+        System.out.println(target);
+        return target;
     }
 }

@@ -4,6 +4,7 @@ import ntou.wbse.hytc.entity.*;
 import ntou.wbse.hytc.exception.NotFoundException;
 import ntou.wbse.hytc.service.HytcService;
 import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -110,6 +111,13 @@ public class HytcController {
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/signIn").build().toUri();
             return ResponseEntity.created(location).body(user);
         }
+    }
+
+    @PostMapping(value = "/save")
+    public ResponseEntity<History> saveHistory(@RequestBody History target){
+        History history = HytcService.save(target);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/save").build().toUri();
+        return ResponseEntity.created(location).body(history);
     }
 }
 // add user login?

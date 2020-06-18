@@ -370,6 +370,7 @@
             .then(function (res) {
                 console.table(res);
                 // todo: save result if user exist
+                saveHistory(res);
                 let field = document.getElementById("optionField");
                 let map = res.detail;
                 //console.log(map);
@@ -380,7 +381,7 @@
                     <tr>
                         <td>Result</td>
                         <td>` + res.result + `</td>
-                        <td>` + res.target.weights[res.target.options.indexOf(res.result)] + `</td>
+                        <td>` + rate(weiList, res.target.weights[res.target.options.indexOf(res.result)]) + `</td>
                     </tr>
                     </table>`;
             })
@@ -481,6 +482,7 @@
                 console.log(res);
                 console.log(res.detail.hundred);
                 console.log(getDetail(res.detail.hundred));
+                saveHistory(res);
                 let field = document.getElementById("diceField");
                 let detail = res.detail;
                 field.innerHTML = `<table id="resp">
@@ -533,6 +535,7 @@
             })
             .then(function (res) {
                 console.log(res);
+                saveHistory(res);
                 let field = document.getElementById("diceField");
                 field.innerHTML = `<table id="resp">
                     <tr><td colspan="2">Roll Cube Dice Result</td></tr>
@@ -559,8 +562,44 @@
         return info;
     }
 
-    function saveHistory(target, mode) {
-        let url = urlBase + ``;
+    function saveHistory(target) {
+        let url = urlBase + `/save`;
+        if(localStorage.getItem("userId") === null){
+            console.log("please login to save history");
+            return;
+        }
+        fetch(url, {method: 'POST', headers: {
+            'Content-Type': 'application/json'
+            }, body: JSON.stringify({
+                userId: localStorage.getItem("userId"),
+                historyId: target.historyId,
+                timestamp: new Date(),
+                action: target.action,
+                result: target.result,
+                detail: target.detail,
+                target: target.target
+            })})
+            .then(function (res) {
+                console.log(res);
+                if(res.ok){
+                    return res.json();
+                }
+                throw new Error("error occur during history save process");
+            })
+            .catch(function (err) {
+                console.log(err.message);
+            })
+            .then(function (res) {
+                console.table(res);
+            })
+    }
+
+    function rate(list, target) {
+        let sum = 0;
+        [...list].forEach(ele => {
+            sum += parseInt(ele);
+        })
+        return (target/sum).toFixed(2);
     }
 
     function checkUser(){
