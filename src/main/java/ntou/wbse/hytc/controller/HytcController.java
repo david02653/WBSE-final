@@ -75,9 +75,9 @@ public class HytcController {
     }
 
     @PutMapping(value = "/{optionId}/update")
-    public ResponseEntity<Map<String, Integer>> updateOption(@PathVariable String optionId, @RequestBody OptionListRequest request){
-        // TODO : PUT mapping, update user defined options
-        return null;
+    public ResponseEntity<OptionListResponse> updateOption(@PathVariable String optionId, @RequestBody OptionListRequest request){
+        OptionListResponse response = HytcService.updateOptionList(optionId, request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/option/save")

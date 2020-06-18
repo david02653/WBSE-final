@@ -9,7 +9,7 @@ public class History {
 
     private String userId = "init";
     private String historyId;
-    private Date timestamp = null;
+    private String timestamp = "never";
     private String action; // what user do
     private Object result; // what user got as result
     private Object detail = null; // action details
@@ -39,7 +39,7 @@ public class History {
         this.userId = userId;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -67,7 +67,7 @@ public class History {
         return userId;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 

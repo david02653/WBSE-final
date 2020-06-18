@@ -91,7 +91,7 @@ public class HytcService {
         //RollResult result = new RollResult(sum);
         result.setTarget(request);
         result.setResult(sum);
-        result.setAction("roll any type of dice");
+        result.setAction("rollDice");
         result.setDetail(detail);
         return result;
     }
@@ -112,7 +112,7 @@ public class HytcService {
         }
         //String result = WeightRandom.roll(map);
         History result = new History();
-        result.setAction("roll option list");
+        result.setAction("rollList");
         result.setResult(WeightRandom.roll(map));
         result.setDetail(map);
         result.setTarget(request);
@@ -128,9 +128,16 @@ public class HytcService {
         return generateOptionResponse(list);
     }
 
-    public static OptionList updateOptionList(String id){
-        // todo: search from database and update optionList
-        return null;
+    public static OptionListResponse updateOptionList(String id, OptionListRequest request){
+        // throw error if not exist
+        OptionList old = optionRepository.findById(id).orElseThrow(() -> new NotFoundException("Target OptionList Not Found !"));
+        OptionList list = generateOptionList(request);
+        list.setUid("init");
+        list.setId(old.getId());
+        optionRepository.deleteById(old.getId());
+        optionRepository.save(list);
+        System.out.println(list);
+        return generateOptionResponse(list);
     }
 
     public static int removeOptionList(String id){

@@ -184,6 +184,7 @@
                     <!--<input type="text" id="username" placeholder="User Name">-->
                     <input type="text" id="userId" placeholder="User ID">
                     <input type="button" id="login" value="Login">
+                    <input type="button" id="logout" value="Logout">
                     <input type="text" value="" placeholder="Current User" id="currentUser" disabled>
                     <input type="text" value="" placeholder="Current id" id="currentId" disabled>
                     <input type="button" value="Copy User id" id="copy">
@@ -271,6 +272,54 @@
             })
     }
 
+    function updateList() {
+        let id = `${document.getElementById("listId").value}`;
+        if(!id){
+            console.log("please input Option List id.");
+            return;
+        }else console.log("your listId is " + id);
+        let url = urlBase + `/` + id + `/update`;
+        console.log(url);
+
+        let optList = [];
+        let weiList = [];
+        let newList = document.getElementById("list").getElementsByTagName("div");
+        [...newList].forEach(opt => {
+            let element = opt.getElementsByTagName("input");
+            if(element[0].value === "") return true;
+            if(element[1].value < 0 || element[1].value > 10000) return true;
+            optList.push(element[0].value);
+            weiList.push(element[1].value);
+        })
+        console.log(optList);
+        console.log(weiList);
+        if(optList.length === 0 || weiList.length === 0){
+            console.log("please input something about your options.");
+            return;
+        }
+
+        fetch(url, {method: 'PUT', headers: {
+            'Content-Type': 'application/json'
+            }, body: JSON.stringify({
+                count: newList.length,
+                options: optList,
+                weights: weiList
+            })})
+            .then(function (res) {
+                console.log(res);
+                if(res.ok){
+                    return res.json();
+                }
+                throw new Error("Error occur when list update");
+            })
+            .catch(function (err) {
+                console.log("error: " + err.message);
+            })
+            .then(function (res) {
+                console.log(res);
+        })
+    }
+
     function saveList() {
         let url = urlBase + '/option/save';
         let originCont = document.getElementById("list").getElementsByTagName("div");
@@ -289,6 +338,11 @@
         })
         console.log(optList);
         console.log(weiList);
+        if(optList.length === 0 || weiList.length === 0){
+            console.log("please input something about your options.");
+            window.alert("you need to input something.");
+            return;
+        }
 
         fetch(url, {method: 'POST', headers: {
             'Content-Type': 'application/json'
@@ -353,6 +407,11 @@
         })
         console.log(optList);
         console.log(weiList);
+        if(optList.length === 0 || weiList.length === 0){
+            console.log("please input something about your options.");
+            window.alert("you need to input something.");
+            return;
+        }
 
         fetch(url, {method: 'POST', headers: {
             'Content-Type': 'application/json'
@@ -391,6 +450,11 @@
         let url = urlBase + `/signUp`;
         let username = document.getElementById("newUser");
         console.log(url);
+        if(username.value === ""){
+            console.log("please input username.");
+            window.alert("please input username.");
+            return;
+        }
         // fetch server to get id
         fetch(url, {method: 'POST', headers: {
             'Content-Type': 'application/json'
@@ -422,6 +486,10 @@
     function login(){
         let userId = document.getElementById("userId");
         console.log(userId.value);
+        if(userId.value === ""){
+            console.log("please input user id.");
+            return;
+        }
         let url = urlBase + `/signIn`;
         // fetch server to check if user available
         fetch(url, {method: 'POST', headers: {
@@ -451,6 +519,11 @@
         //window.location.reload();
     }
 
+    function logout() {
+        localStorage.clear();
+        checkUser();
+    }
+
     function rollDiceCmd() {
         let url = urlBase + `/roll`;
         console.log(url);
@@ -458,7 +531,10 @@
         let diceNum = [];
         [...dice].forEach(typ => {
             //console.log(typ);
-            diceNum.push(typ.value);
+            if(typ.value < 0)
+                diceNum.push(0);
+            else
+                diceNum.push(typ.value);
         })
         console.log(diceNum);
 
@@ -568,12 +644,13 @@
             console.log("please login to save history");
             return;
         }
+        let time = Date.now();
         fetch(url, {method: 'POST', headers: {
             'Content-Type': 'application/json'
             }, body: JSON.stringify({
                 userId: localStorage.getItem("userId"),
                 historyId: target.historyId,
-                timestamp: new Date(),
+                timestamp: new Date(time).toLocaleString(),
                 action: target.action,
                 result: target.result,
                 detail: target.detail,
@@ -602,6 +679,11 @@
         return (target/sum).toFixed(2);
     }
 
+    function updateHistoryList() {
+        let url = urlBase + ``;
+        console.log(url);
+    }
+
     function checkUser(){
         if(localStorage.getItem("userId") === null){
             // no current user
@@ -609,6 +691,11 @@
             document.getElementById("currentUser").setAttribute("style", "display: none");
             document.getElementById("currentId").setAttribute("style", "display: none");
             document.getElementById("copy").setAttribute("style", "display: none");
+            document.getElementById("logout").setAttribute("style", "display: none");
+            document.getElementById("userId").removeAttribute("style");
+            document.getElementById("login").removeAttribute("style");
+            document.getElementById("signUp").removeAttribute("style");
+            document.getElementById("newUser").removeAttribute("style");
         }else{
             // got current user
             document.getElementById("currentId").removeAttribute("style");
@@ -623,6 +710,7 @@
             document.getElementById("newUser").setAttribute("style", "display: none");
             //document.getElementById("username").setAttribute("style", "display: none");
             document.getElementById("copy").removeAttribute("style");
+            document.getElementById("logout").removeAttribute("style");
 
         }
     }
@@ -641,6 +729,8 @@
     document.getElementById("executeList").addEventListener("click", executeList);
     document.getElementById("rollDice").addEventListener("click", rollDiceCmd);
     document.getElementById("rollOne").addEventListener("click", rollCube);
+    document.getElementById("logout").addEventListener("click", logout);
+    document.getElementById("updateList").addEventListener("click", updateList);
 </script>
 
 </html>
