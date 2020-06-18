@@ -236,4 +236,10 @@ public class HytcService {
         System.out.println(target);
         return target;
     }
+
+    public static ArrayList<History> getAllHistory(String userId){
+        ArrayList<History> list = (ArrayList<History>)historyRepository.findAllByUserIdOrderByTimestampDesc(userId);
+        System.out.println(list);
+        return list;
+    }
 }

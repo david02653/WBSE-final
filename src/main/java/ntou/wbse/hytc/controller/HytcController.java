@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
@@ -29,12 +30,6 @@ public class HytcController {
         // GET mapping, return multiple dice rolling result, same type of dice
         History result = HytcService.rollSingleTypeDice(cmd);
         return ResponseEntity.ok(result);
-    }
-
-    @GetMapping(value = "/{userId}/history")
-    public ResponseEntity<Object> getHistoryResultList(@PathVariable String userId){
-        // TODO : GET mapping, return past result list
-        return null;
     }
 
     @PostMapping(value = "/roll")
@@ -118,6 +113,13 @@ public class HytcController {
         History history = HytcService.save(target);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/save").build().toUri();
         return ResponseEntity.created(location).body(history);
+    }
+
+    @GetMapping(value = "/{userId}/history")
+    public ResponseEntity<ArrayList<History>> getHistoryResultList(@PathVariable String userId){
+        // TODO : GET mapping, return past result list
+        ArrayList<History> list = HytcService.getAllHistory(userId);
+        return ResponseEntity.ok(list);
     }
 }
 // add user login?

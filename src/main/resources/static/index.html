@@ -103,6 +103,10 @@
         border: 1px solid black;
         border-collapse: collapse;
     }
+    .copyfrom {
+        position: absolute;
+        left: -9999px;
+    }
 </style>
 <body>
     <div id="main" class="container">
@@ -188,6 +192,8 @@
                     <input type="text" value="" placeholder="Current User" id="currentUser" disabled>
                     <input type="text" value="" placeholder="Current id" id="currentId" disabled>
                     <input type="button" value="Copy User id" id="copy">
+                    <input class='copyfrom' id="cText" tabindex='-1' aria-hidden='true'>
+                    <input type="button" id="history" value="update now">
                 </div>
                 <div id="historyBlock" class="his">
                     history display
@@ -198,6 +204,7 @@
 </body>
 <script>
     let urlBase = window.location.origin + `/hytc`; // spring boot url base
+    //let urlBase = window.location.origin + `/hytc/hytc`; // url for tomcat
     function addOption(){
         console.log("try to add option");
         document.getElementById("list").innerHTML += `<div>
@@ -684,6 +691,46 @@
         console.log(url);
     }
 
+    function copy() {
+
+        //just_for_copy is my invisible extra field
+        document.getElementById('cText').value = document.getElementById('currentId').value;
+
+        let justForCopy = document.getElementById('cText');
+        console.log("copy: " + document.getElementById("cText").value);
+
+        justForCopy.select();
+
+        document.execCommand("copy");
+    }
+
+    function history() {
+        if(localStorage.getItem("userId") === null){
+            console.log("please login.");
+            return;
+        }
+        let userId = localStorage.getItem("userId");
+        let url = urlBase + `/` + userId + `/history`;
+        console.log(url);
+
+        fetch(url, {method: 'GET', headers: {
+            'Content-Type': 'application/json'
+            }})
+            .then(function (res) {
+                console.log(res);
+                if(res.ok){
+                    return res.json();
+                }
+            })
+            .then(function (res) {
+                console.log(res);
+                let info = "";
+                for(let i=0; i<10; i++){
+
+                }
+            })
+    }
+
     function checkUser(){
         if(localStorage.getItem("userId") === null){
             // no current user
@@ -716,11 +763,7 @@
     }
     //document.getElementById("userId").setAttribute("style", "display: none");
     document.getElementById("addOption").addEventListener("click", addOption);
-    document.getElementById("copy").addEventListener("click", function(){
-        document.getElementById("userId").select();
-        document.execCommand("copy");
-        console.log("copy id");
-    });
+    document.getElementById("copy").addEventListener("click", copy);
     window.addEventListener("load", checkUser);
     document.getElementById("signUp").addEventListener("click", signUp);
     document.getElementById("login").addEventListener("click", login);
@@ -731,6 +774,7 @@
     document.getElementById("rollOne").addEventListener("click", rollCube);
     document.getElementById("logout").addEventListener("click", logout);
     document.getElementById("updateList").addEventListener("click", updateList);
+    document.getElementById("history").addEventListener("click", history);
 </script>
 
 </html>
