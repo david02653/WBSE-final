@@ -724,10 +724,14 @@
             })
             .then(function (res) {
                 console.log(res);
-                let info = "";
+                let list = [];
                 for(let i=0; i<10; i++){
-
+                    if(res[i] != null){
+                        list.push(res[i]);
+                    }
                 }
+                console.log(list.length);
+                console.log(list);
             })
     }
 
